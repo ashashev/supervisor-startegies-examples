@@ -1,8 +1,6 @@
 package com.example
 
-import akka.actor.Actor
-import akka.actor.ActorRef
-import akka.actor.Props
+import akka.actor.{ Actor, ActorRef, Props }
 
 class FailingActor(monitor: Option[ActorRef]) extends Actor with LifecycleMonitorable {
   import FailingActor._
@@ -10,10 +8,10 @@ class FailingActor(monitor: Option[ActorRef]) extends Actor with LifecycleMonito
   monitor.foreach(subscribers += _)
 
   def receive: Actor.Receive = {
-    case ThrowError => throw new Error("Error from the FailingActor")
+    case ThrowError     => throw new Error("Error from the FailingActor")
     case ThrowException => throw new Exception("Error from the FailingActor")
-    case Throw(e) => throw e
-    case Ping => sender() ! Pong
+    case Throw(e)       => throw e
+    case Ping           => sender() ! Pong
   }
 }
 

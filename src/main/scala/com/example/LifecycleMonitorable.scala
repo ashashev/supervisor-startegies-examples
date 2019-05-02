@@ -8,9 +8,9 @@ trait LifecycleMonitorable extends Actor {
   protected var subscribers = Set.empty[ActorRef]
 
   def subUnsub: Actor.Receive = {
-    case Subscribe(subscriber) => subscribers += subscriber
+    case Subscribe(subscriber)   => subscribers += subscriber
     case Unsubscribe(subscriber) => subscribers -= subscriber
-    case WhoSubscribe => sender() ! subscribers
+    case WhoSubscribe            => sender() ! subscribers
   }
 
   override def unhandled(message: Any): Unit = {
@@ -19,22 +19,22 @@ trait LifecycleMonitorable extends Actor {
   }
 
   override def preStart(): Unit = {
-    subscribers foreach (_ ! PreStartEvent)
+    subscribers.foreach(_ ! PreStartEvent)
     super.preStart()
   }
 
   override def preRestart(reason: Throwable, message: Option[Any]): Unit = {
-    subscribers foreach (_ ! PreRestartEvent(reason, message))
+    subscribers.foreach(_ ! PreRestartEvent(reason, message))
     super.preRestart(reason, message)
   }
 
   override def postRestart(reason: Throwable): Unit = {
-    subscribers foreach (_ ! PostRestartEvent(reason))
+    subscribers.foreach(_ ! PostRestartEvent(reason))
     super.postRestart(reason)
   }
 
   override def postStop(): Unit = {
-    subscribers foreach (_ ! PostStopEvent)
+    subscribers.foreach(_ ! PostStopEvent)
     super.postStop()
   }
 }

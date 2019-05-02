@@ -3,8 +3,7 @@ package com.example
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
-import akka.actor.ActorRef
-import akka.actor.ActorSystem
+import akka.actor.{ ActorRef, ActorSystem }
 import akka.pattern.ask
 import akka.util.Timeout
 
@@ -28,7 +27,8 @@ object Main extends App {
       """Select action:
         |1. send exception
         |2. send error
-        |0. exit""".stripMargin)
+        |0. exit""".stripMargin
+    )
     print("> ")
     io.StdIn.readInt() match {
       case 1 =>
