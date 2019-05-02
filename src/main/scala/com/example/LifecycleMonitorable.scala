@@ -10,6 +10,7 @@ trait LifecycleMonitorable extends Actor {
   def subUnsub: Actor.Receive = {
     case Subscribe(subscriber) => subscribers += subscriber
     case Unsubscribe(subscriber) => subscribers -= subscriber
+    case WhoSubscribe => sender() ! subscribers
   }
 
   override def unhandled(message: Any): Unit = {
@@ -41,6 +42,7 @@ trait LifecycleMonitorable extends Actor {
 object LifecycleMonitorable {
   case class Subscribe(subscriber: ActorRef)
   case class Unsubscribe(subscriber: ActorRef)
+  case object WhoSubscribe
 
   sealed trait LifecycleEvent
   case object PreStartEvent extends LifecycleEvent

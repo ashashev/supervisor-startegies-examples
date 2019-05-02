@@ -32,10 +32,10 @@ object Main extends App {
     print("> ")
     io.StdIn.readInt() match {
       case 1 =>
-        child.map(_ ! "exception")
+        child.map(_ ! FailingActor.ThrowException)
         commandCycle()
       case 2 =>
-        child.map(_ ! "error")
+        child.map(_ ! FailingActor.ThrowError)
         commandCycle()
       case 0 =>
         system.terminate()

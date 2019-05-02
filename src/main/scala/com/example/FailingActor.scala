@@ -10,13 +10,21 @@ class FailingActor(monitor: Option[ActorRef]) extends Actor with LifecycleMonito
   monitor.foreach(subscribers += _)
 
   def receive: Actor.Receive = {
-    case "error" => throw new Error("error")
-    case "exception" => throw new Exception("exception")
-    case e: Throwable => throw e
+    case ThrowError => throw new Error("Error from the FailingActor")
+    case ThrowException => throw new Exception("Error from the FailingActor")
+    case Throw(e) => throw e
+    case Ping => sender() ! Pong
   }
 }
 
 object FailingActor {
   def props(monitor: ActorRef) = Props(new FailingActor(Option(monitor)))
   def props() = Props(new FailingActor(None))
+
+  object ThrowError
+  object ThrowException
+  case class Throw(e: Throwable)
+
+  object Ping
+  object Pong
 }
